@@ -35,13 +35,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha_Steps: 8
-    - _Center_Color_Pos: 0.45
-    - _Center_Glow: 2.94
+    - _Center_Color_Pos: 1
+    - _Center_Glow: 6.89
     - _Color_steps: 8
     - _DanceAmplitude: 0.01
     - _DanceScale: 2.14
     - _DanceTimeScale: 2
-    - _Edge_Color_Pos: 0
+    - _Edge_Color_Pos: 0.21
     - _Edge_Glow: 1
     - _End_Color_Pos: 1
     - _End_Glow: 3.53
@@ -61,7 +61,7 @@ Material:
     - _Point1: 0
     - _Point2: 0.5
     - _Point3: 1
-    - _Roundness: 0.18
+    - _Roundness: 0.24
     - _Scale: 0.44
     - _Shape_End_Point: 1
     - _Shape_End_Width: 0
@@ -78,9 +78,9 @@ Material:
     - _Width2: 1
     - _Width3: 0
     m_Colors:
-    - _Center_Color: {r: 1, g: 0.9564916, b: 0, a: 1}
-    - _Edge_Color: {r: 1, g: 0.07058824, b: 0, a: 1}
+    - _Center_Color: {r: 1, g: 0.91770935, b: 0, a: 1}
+    - _Edge_Color: {r: 0.2114377, g: 1, b: 0, a: 1}
     - _End_Color: {r: 1, g: 0.5240722, b: 0, a: 1}
-    - _Scroll_Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _Scroll_Direction: {r: 0, g: 3, b: 0, a: 0}
     - _Start_Color: {r: 1, g: 0.06575381, b: 0, a: 1}
   m_BuildTextureStacks: []
