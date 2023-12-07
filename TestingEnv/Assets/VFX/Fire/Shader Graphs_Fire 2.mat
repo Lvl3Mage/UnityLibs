@@ -58,6 +58,8 @@ Material:
     - _Noise_Start_Amplitude: 0
     - _Noise_Start_Point: 0
     - _Opacity: 0.78
+    - _Pixel_Scale: 136.85
+    - _Pixelate: 1
     - _Point1: 0
     - _Point2: 0.5
     - _Point3: 1

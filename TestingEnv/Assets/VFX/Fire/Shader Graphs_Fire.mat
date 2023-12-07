@@ -36,7 +36,7 @@ Material:
     m_Floats:
     - _Alpha_Steps: 8
     - _Center_Color_Pos: 1
-    - _Center_Glow: 6.07
+    - _Center_Glow: 5
     - _Color_steps: 3.27
     - _DanceAmplitude: 0.18
     - _DanceScale: 1
@@ -58,6 +58,8 @@ Material:
     - _Noise_Start_Amplitude: 0
     - _Noise_Start_Point: 0
     - _Opacity: 0.87
+    - _Pixel_Scale: 80
+    - _Pixelate: 1
     - _Point1: 0
     - _Point2: 0.5
     - _Point3: 1
