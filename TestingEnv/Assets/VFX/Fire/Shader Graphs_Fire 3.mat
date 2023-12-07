@@ -35,13 +35,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha_Steps: 8
-    - _Center_Color_Pos: 1
+    - _Center_Color_Pos: 0.87
     - _Center_Glow: 6.89
     - _Color_steps: 8
     - _DanceAmplitude: 0.01
     - _DanceScale: 2.14
     - _DanceTimeScale: 2
-    - _Edge_Color_Pos: 0.21
+    - _Edge_Color_Pos: 0.19
     - _Edge_Glow: 1
     - _End_Color_Pos: 1
     - _End_Glow: 3.53
@@ -50,9 +50,9 @@ Material:
     - _Middle_Point: 0.18
     - _Middle_Width: 0.93
     - _Noise_Amplitude: 0.1
-    - _Noise_End_Amplitude: 0.6
+    - _Noise_End_Amplitude: 0.54
     - _Noise_End_Point: 1
-    - _Noise_Middle_Amplitude: 0.25
+    - _Noise_Middle_Amplitude: 0.14
     - _Noise_Middle_Point: 0.5
     - _Noise_Scale: 5.91
     - _Noise_Start_Amplitude: 0

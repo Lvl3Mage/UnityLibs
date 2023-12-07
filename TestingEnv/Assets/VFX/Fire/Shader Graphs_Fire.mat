@@ -79,7 +79,7 @@ Material:
     - _Width3: 0
     m_Colors:
     - _Center_Color: {r: 1, g: 0.7466958, b: 0, a: 1}
-    - _Edge_Color: {r: 1, g: 0.06575381, b: 0, a: 1}
+    - _Edge_Color: {r: 1, g: 0, b: 0, a: 1}
     - _End_Color: {r: 1, g: 0.5240722, b: 0, a: 1}
     - _Scroll_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _Start_Color: {r: 1, g: 0.06575381, b: 0, a: 1}
