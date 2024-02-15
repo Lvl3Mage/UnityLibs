@@ -34,9 +34,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _First_edge_offset: 0.02
+    - _Invert_Light: 0
+    - _Light_Angle: 236
+    - _Lit_Area: 0.14
+    - _Lit_Size: 0.134
+    - _Pixelate: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    m_Colors: []
+    - _Randomness: 2.77
+    - _Randomness_1: 11.4
+    - _Resolution: 110
+    - _Scale: 5
+    - _Scale_1: 11.46
+    - _Second_Edge_Offset: 0.04
+    m_Colors:
+    - _First_Edge_Color: {r: 0.509804, g: 0.3411765, b: 0.2431373, a: 1}
+    - _Light_Direction: {r: 1, g: 0, b: 0, a: 0}
+    - _Lit_Color: {r: 0.94509804, g: 0.69223315, b: 0.6, a: 1}
+    - _Main_Color: {r: 0.7450981, g: 0.6078432, b: 0.4392157, a: 1}
+    - _Second_Edge_Color: {r: 0.26415092, g: 0.17730796, b: 0.12584549, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &5573002429895163291
 MonoBehaviour:

@@ -49,16 +49,16 @@ Material:
     - _End_Width: 0
     - _Middle_Point: 0.18
     - _Middle_Width: 0.93
-    - _Noise_Amplitude: 1
+    - _Noise_Amplitude: 0.79
     - _Noise_End_Amplitude: 0.6
     - _Noise_End_Point: 1
     - _Noise_Middle_Amplitude: 0.25
     - _Noise_Middle_Point: 0.5
-    - _Noise_Scale: 5.91
+    - _Noise_Scale: 13.89
     - _Noise_Start_Amplitude: 0
     - _Noise_Start_Point: 0
-    - _Opacity: 0.87
-    - _Pixel_Scale: 80
+    - _Opacity: 0.968
+    - _Pixel_Scale: 110
     - _Pixelate: 1
     - _Point1: 0
     - _Point2: 0.5
@@ -81,7 +81,7 @@ Material:
     - _Width3: 0
     m_Colors:
     - _Center_Color: {r: 1, g: 0.7466958, b: 0, a: 1}
-    - _Edge_Color: {r: 1, g: 0, b: 0, a: 1}
+    - _Edge_Color: {r: 0.745283, g: 0, b: 0, a: 1}
     - _End_Color: {r: 1, g: 0.5240722, b: 0, a: 1}
     - _Scroll_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _Start_Color: {r: 1, g: 0.06575381, b: 0, a: 1}
