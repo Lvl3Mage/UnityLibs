@@ -54,14 +54,14 @@ Material:
     - _First_edge_offset: 0.02
     - _Invert_Light: 0
     - _LIGHT_TYPE: 0
-    - _Light_Angle: 301
-    - _Light_max_range: 2.91
+    - _Light_Angle: 296
+    - _Light_max_range: 2.83
     - _Light_min_range: 0
     - _Lit_Area: 1
     - _Lit_Size: 0.368
     - _Lit_Threshold: 0.577
     - _Max_Range_Wobble_Speed: 0.7
-    - _Max_range_wobble: 0.3
+    - _Max_range_wobble: 0.1
     - _Pixelate: 1
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -71,13 +71,15 @@ Material:
     - _Scale: 2.75
     - _Scale_1: 10.67
     - _Second_Edge_Offset: 0.04
+    - _Shadow_Strength: 0.773
+    - _Shadow_Threshold: 0.083
     - _Warp_Scale: 14.37
     - _Warp_Size: 0.01
     m_Colors:
     - _First_Edge_Color: {r: 0.509804, g: 0.3411765, b: 0.2431373, a: 1}
     - _Light_Direction: {r: 1, g: 0, b: 0, a: 0}
-    - _Light_world_position: {r: -0.05, g: -0.12, b: 0, a: 0}
-    - _Lit_Color: {r: 0.9299191, g: 0.67926705, b: 0.5852725, a: 1}
+    - _Light_world_position: {r: -0.16, g: 0.21, b: 0, a: 0}
+    - _Lit_Color: {r: 0.92941177, g: 0.68021566, b: 0.58431375, a: 1}
     - _Main_Color: {r: 0.72506726, g: 0.6132553, b: 0.47588637, a: 1}
     - _Second_Edge_Color: {r: 0.26415092, g: 0.17730796, b: 0.12584549, a: 1}
   m_BuildTextureStacks: []
