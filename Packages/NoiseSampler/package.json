@@ -1,0 +1,17 @@
+{
+  "name": "com.Lvl3Mage.NoiseSampler",
+  "version": "0.1.0",
+  "displayName": "Noise Sampler",
+  "description": "A utility library for working with noise",
+  "unity": "2021.3",
+  "dependencies": {
+ },
+ "keywords": [
+    "noise",
+    "utility",
+  ],
+  "author": {
+    "name": "Lvl3Mage",
+    "email": "lvlthreemage@gmail.com",
+  }
+}

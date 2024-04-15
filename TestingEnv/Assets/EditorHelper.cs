@@ -4,7 +4,7 @@ using UnityEditor;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
-
+#if UNITY_EDITOR
 //Put these methods in whatever static class youd like =)
 public static class EditorHelper
 {
@@ -111,3 +111,4 @@ public static class EditorHelper
     }
         
 }
+#endif

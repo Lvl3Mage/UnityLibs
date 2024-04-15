@@ -29,9 +29,18 @@ public class NoiseSampler
 	}
 	[Header("Filter settings")]
 	[SerializeField] FilterType filter;
-	[SelectableField(nameof(filter), (int)FilterType.Exponential)] [SerializeField] float exponent;
-	[SelectableField(nameof(filter), (int)FilterType.SCurve)] [SerializeField] float slope;
-	[SelectableField(nameof(filter), (int)FilterType.Falloff)] [SerializeField] float falloff;
+	#if UNITY_EDITOR
+	[SelectableField(nameof(filter), (int)FilterType.Exponential)] 
+	#endif
+	[SerializeField] float exponent;
+	#if UNITY_EDITOR
+	[SelectableField(nameof(filter), (int)FilterType.SCurve)] 
+	#endif
+	[SerializeField] float slope;
+	#if UNITY_EDITOR
+	[SelectableField(nameof(filter), (int)FilterType.Falloff)] 
+	#endif
+	[SerializeField] float falloff;
 
 	[Header("Scaling settings")]
 	[SerializeField] float minValue;
