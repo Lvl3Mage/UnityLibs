@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Text;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class NoiseSampler
@@ -14,14 +15,15 @@ public class NoiseSampler
 	[SerializeField] Vector2 scrollSpeed;
 	[SerializeField] Vector2 offset;
 
-	[Tooltip("Amount of indifvidual octaves the noise has")]
+	[Tooltip("Amount of individual octaves the noise has")]
 	[SerializeField] [MinAttribute(1)] int octaves;
 
 	[Tooltip("Speed with witch the frequency of each octave grows")]
 	[SerializeField] [MinAttribute(1)] float lacunarity;
 
+	[FormerlySerializedAs("persistance")]
 	[Tooltip("How much each the influence of each octave persists with octave amount")]
-	[SerializeField] [Range(0,1)] float persistance;
+	[SerializeField] [Range(0,1)] float persistence;
 
 	//
 	public enum FilterType{
@@ -51,7 +53,7 @@ public class NoiseSampler
 		float rawVal = 0;
 		for(int i = 0; i < octaves; i++){
 			float frequency = Mathf.Pow(lacunarity, i);
-			float amplitude = Mathf.Pow(persistance, i);
+			float amplitude = Mathf.Pow(persistence, i);
 			Vector2 noiseCoords = baseCoords*frequency +offset;
 			float octaveVal = Mathf.PerlinNoise(noiseCoords.x, noiseCoords.y)*amplitude;
 
@@ -166,7 +168,8 @@ public class NoiseSamplerDrawer : PropertyDrawer
 		}
 		return totalHeight + 100;
 	}
-	Rect PropertyRect(SerializedProperty prop, float x, float width, ref float drawHeight){
+
+	static Rect PropertyRect(SerializedProperty prop, float x, float width, ref float drawHeight){
 		float propHeight = EditorGUI.GetPropertyHeight(prop);
 		var propRect = new Rect(x, drawHeight, width, propHeight);
 		float propSizeMultiplier = Mathf.Clamp01(Mathf.Ceil(propHeight));
