@@ -5,20 +5,26 @@ namespace CameraManagement
 	public class CameraController : MonoBehaviour
 	{
 		[SerializeField] protected bool active = true;
-		public void SetActive(bool active)
+		protected bool respondToInput = true;
+		[SerializeField] bool controlledExternally = false;
+		public void SetRespondToInput(bool respondToInput)
 		{
-			bool oldState = this.active;
-			this.active = active;
-			if (oldState != active){
-				OnActiveChanged(oldState, active);
+			this.respondToInput = respondToInput;
+		}
+		public void MoveCamera()
+		{
+			if (!controlledExternally){
+				Debug.LogError("Camera Controller is not controlled externally");
+				return;
 			}
+
+			CameraUpdate();
 		}
-		protected virtual void OnActiveChanged(bool oldState, bool newState)
+		public void LateUpdate()
 		{
-			//throw new System.NotImplementedException();
-		}
-		void LateUpdate()
-		{
+			if (controlledExternally){
+				return;
+			}
 			if (!active)
 			{
 				return;

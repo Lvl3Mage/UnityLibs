@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using UnityEditor.Experimental.GraphView;
+﻿using System.Numerics;
+using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Vector2 = UnityEngine.Vector2;
 
 namespace Fourier
 {
@@ -17,17 +17,21 @@ namespace Fourier
 				this.index = index;
 				this.value = value;
 			}
+			public Vector2 GetPosition(float time)
+			{
+				Complex rotated = Complex.FromPolarCoordinates(value.Magnitude, value.Phase + time * 2 * Mathf.PI * index);
+				return new Vector2((float)rotated.Real, (float)rotated.Imaginary);
+			}
 		}
-		List<Coefficient> coefficients;
-		Complex[] signalPoints;
-		public DFT(Signal signal)
+		Coefficient[] coefficients;
+		public DFT(Signal signal, int depth)
 		{
-			coefficients = new List<Coefficient>();
-			signalPoints = signal.GetComplexPoints();
+			Complex[] signalPoints = signal.GetComplexPoints();
+			ComputeCoefficients(depth, signalPoints);
 		}
-		void ComputeCoefficient(int k)
+		Coefficient ComputeCoefficient(int k, Complex[] signalPoints)
 		{
-			Coefficient result = new Coefficient(k, 0);
+			Coefficient result = new(k, 0);
 			float w = 2 * Mathf.PI * k / signalPoints.Length;
 			for (int n = 0; n < signalPoints.Length; n++){
 				float x = w * n;
@@ -35,26 +39,78 @@ namespace Fourier
 				result.value += sample * new Complex(Mathf.Cos(x), -Mathf.Sin(x));
 			}
 
-			result.value = Complex.Divide(result.value, 2*signalPoints.Length);
-			coefficients.Add(result);
+			result.value = Complex.Divide(result.value, signalPoints.Length);
+			return result;
 		}
-		int GetCurrentFrequency()
+		int GetFrequency(int i)
 		{
-			int even = coefficients.Count % 2 == 0 ? 1 : -1;
-			int k = (int)Mathf.Ceil(coefficients.Count / 2f) * even;
+			int even = i % 2 == 0 ? 1 : -1;
+			int k = (int)Mathf.Ceil(i / 2f) * even;
 			return k;
 		}
-		public void ComputeCoefficients(int amount)
+
+		void ComputeCoefficients(int amount, Complex[] signalPoints)
 		{
-			coefficients.Clear();
+			coefficients = new Coefficient[amount];
+#if UNITY_WEBGL && !UNITY_EDITOR
 			for (int i = 0; i < amount; i++){
-				int k = GetCurrentFrequency();
-				ComputeCoefficient(k);
+				int k = GetFrequency(i);
+				coefficients[i] = ComputeCoefficient(k, signalPoints);
 			}
+			
+#else
+			Parallel.For(0, amount, (i) => {
+				int k = GetFrequency(i);
+				coefficients[i] = ComputeCoefficient(k, signalPoints);
+			});
+#endif
 		}
-		public Coefficient[] GetCoefficients()
+		public Vector2 ComputeOrigin(int coefficientIndex, float time)
 		{
-			return coefficients.ToArray();
+			Vector2 result = Vector2.zero;
+			if(coefficientIndex > coefficients.Length){
+				Debug.LogError("Coefficient index out of range");
+			}
+			for (int i = 0; i < coefficientIndex; i++){
+				result += coefficients[i].GetPosition(time);
+			}
+			return result;
+		}
+
+		public Vector2[] ComputePath(int sampleCount)
+		{
+			int depth = coefficients.Length;
+			Vector2[] result = new Vector2[sampleCount];
+			float invSampleCount = 1f / (float)sampleCount;
+#if UNITY_WEBGL && !UNITY_EDITOR
+			for (int i = 0; i < sampleCount; i++){
+				float time = i*invSampleCount;
+				result[i] = ComputeOrigin(depth, time);
+			}
+			
+#else
+			Parallel.For(0, sampleCount, i => {
+				float time = i*invSampleCount;
+				result[i] = ComputeOrigin(depth, time);
+			});
+#endif
+			return result;
+		}
+
+		public Vector2[] ComputePositions(float time)
+		{
+			Vector2[] result = new Vector2[coefficients.Length+1];
+			result[0] = Vector2.zero;
+			for (int i = 1; i < result.Length; i++){
+				result[i] = result[i-1] + coefficients[i-1].GetPosition(time);
+			}
+
+			return result;
+
+		}
+		public int GetDepth()
+		{
+			return coefficients.Length;
 		}
 	}
 }

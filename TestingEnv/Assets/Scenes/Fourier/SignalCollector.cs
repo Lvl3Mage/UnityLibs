@@ -3,57 +3,100 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Fourier
 {
-public class SignalCollector : MonoBehaviour
+public class SignalCollector : MonoBehaviour, IPointerMoveHandler, IPointerDownHandler, IPointerUpHandler
 {
 	Signal currentSignal;
 	bool collecting = false;
-	[SerializeField] SignalRenderer renderer;
-	[SerializeField] DFTVisualizer visualizer;
-
-
-	void Update()
+	[SerializeField] SignalRenderer signalPreview;
+	
+	[SerializeField] int minSmoothingSteps = 1;
+	[SerializeField] int maxSmoothingSteps = 60;
+	public void SetSmoothingSteps(float value)
 	{
-		if (Input.GetKeyDown(KeyCode.Space)){
-			if (collecting){
-				Signal signal = EndCollection();
-				DFT dft = new DFT(signal);
-				dft.ComputeCoefficients(300);
-				visualizer.VizualiseDFT(dft);
-			}
-			else{
-				StartCollection();
-				
-			}
-		}
+		int steps = (int)Mathf.Lerp(minSmoothingSteps, maxSmoothingSteps, value);
+		smoothingSteps = steps;
+	}
+	int smoothingSteps = 20;
+	Vector2[] mousePosBuffer;
+	int mousePosBufferIndex;
+	bool mouseDown = false;
+	public void OnPointerDown(PointerEventData eventData)
+	{
 		if (!collecting){
 			return;
 		}
-		Vector2 mousePos = WorldCamera.GetWorldMousePos();
-		if(!Input.GetMouseButton(0)){
-			return;
+		if(eventData.button == PointerEventData.InputButton.Left){
+			mouseDown = true;
+			BeginSegment();
+			currentSignal.ConnectTo(target:GetAveragePos(), easing:Ease);
 		}
-		if (Input.GetMouseButtonDown(0)){
-			currentSignal.ConnectTo(mousePos);
+	}
+	public void OnPointerUp(PointerEventData eventData)
+	{
+		if(eventData.button == PointerEventData.InputButton.Left){
+			mouseDown = false;
 		}
-		currentSignal.AddPoint(mousePos); 
-		renderer.RenderSignal(currentSignal);
-					
 	}
 
-	void StartCollection()
+	Vector2 GetAveragePos()
+	{
+		Vector2 averagePos = new Vector2(0, 0);
+		foreach (var pos in mousePosBuffer){
+			averagePos += pos;
+		}
+		averagePos /= mousePosBuffer.Length;
+		return averagePos;
+	}
+	public void OnPointerMove(PointerEventData eventData)
+	{
+		if (!collecting){
+			return;
+		}
+		if(!mouseDown){
+			return;
+		}
+		Debug.Log("Pointer move");
+		Vector2 mousePos = WorldCamera.GetWorldMousePos();
+		mousePosBuffer[mousePosBufferIndex] = mousePos;
+		mousePosBufferIndex++;
+		mousePosBufferIndex %= mousePosBuffer.Length;
+		
+		currentSignal.AddPoint(GetAveragePos());
+		
+		signalPreview.RenderSignal(currentSignal);
+	}
+	public bool outputValid()
+	{
+		return currentSignal.GetPoints().Length > 0;
+	}
+
+	static float Ease(float t)
+	{
+		return t < 0.5f ? 4 * t * t * t : 1 - Mathf.Pow(-2 * t + 2, 3) / 2;
+	}
+	void BeginSegment()
+	{
+		mousePosBufferIndex = 0;
+		mousePosBuffer = new Vector2[smoothingSteps];
+		Array.Fill<Vector2>(mousePosBuffer, WorldCamera.GetWorldMousePos());
+	}
+	public void StartCollection()
 	{
 		currentSignal = new Signal();
 		collecting = true;
 	}
 
-	Signal EndCollection()
+	public Signal EndCollection()
 	{
-		currentSignal.EnforceCycle();
+		currentSignal.EnforceCycle(easing:Ease);
 		collecting = false;
 		return currentSignal;
 	}
@@ -69,6 +112,7 @@ public class SignalCollector : MonoBehaviour
 			// Gizmos.DrawSphere(new Vector3(point.x,point.y, 0), 0.1f);
 		}
 	}
+
 }
 public class SignalPoint
 {
@@ -82,24 +126,46 @@ public class SignalPoint
 	}
 }
 
+public class SignalSegment
+{
+	public readonly Vector2[] points;
+	public readonly int endIndex;
+	public SignalSegment(Vector2[] points, int endIndex)
+	{
+		this.points = points;
+		this.endIndex = endIndex;
+	}
+}
+
 public class Signal
 {
 	List<SignalPoint> points = new List<SignalPoint>();
-	
+
+	public void Reserve(int totalAmount)
+	{
+		points.Capacity = totalAmount;
+	}
 	public void AddPoints(Vector2[] newPoints, bool drawn = true)
 	{
 		foreach (var point in newPoints){
 			points.Add(new SignalPoint(point, drawn));
 		}
 	}
+
+	public bool IsTimeDrawn(float time)
+	{
+		int timeIndex = (int)(time * points.Count);
+		return points[timeIndex].drawn;
+	}
+	public void CloseSegment()
+	{
+		AddPoint(points[points.Count-1].position, false);
+	}
 	public void AddPoint(Vector2 newPoint, bool drawn = true)
 	{
 		points.Add(new SignalPoint(newPoint, drawn));
 	}
-	float EaseInOutCubic(float x) {
-		return x < 0.5f ? 4 * x * x * x : 1 - Mathf.Pow(-2 * x + 2, 3) / 2;
-	}
-	public void ConnectTo(Vector2 target, bool draw = false, float sampleDensity = 30)
+	public void ConnectTo(Vector2 target, bool draw = false, float sampleDensity = 30, Func<float, float> easing = null)
 	{
 		if(points.Count == 0){
 			return;
@@ -110,20 +176,22 @@ public class Signal
 		Vector2[] newPoints = new Vector2[samples];
 		for (int i = 0; i < samples; i++){
 			float sampleT = i/(float)samples;
-			sampleT = EaseInOutCubic(sampleT);
+			if (easing != null){
+				sampleT = easing(sampleT);
+			}
 			Vector2 position = Vector2.Lerp(lastPoint, target, sampleT);
 			newPoints[i] = position;
 		}
 		AddPoints(newPoints, draw);
 	}
 
-	public void EnforceCycle()
+	public void EnforceCycle(float sampleDensity = 30, Func<float, float> easing = null)
 	{
 		if(points.Count < 3){
 			return;
 		}
 		Vector2 firstPoint = points[0].position;
-		ConnectTo(firstPoint);
+		ConnectTo(target:firstPoint, sampleDensity:sampleDensity, easing:easing);
 	}
 
 	public Vector2[] GetPositions()
@@ -138,6 +206,10 @@ public class Signal
 	{
 		return points.ToArray();
 	}
+	public int GetPointCount()
+	{
+		return points.Count;
+	}
 
 	public Complex[] GetComplexPoints()
 	{
@@ -149,29 +221,24 @@ public class Signal
 
 		return complexPoints;
 	}
-	public SignalPoint[][] GetDrawnSegments()
+	public SignalSegment[] GetDrawnSegments()
 	{
-		List<SignalPoint[]> segments = new List<SignalPoint[]>();
-		List<SignalPoint> currentSegment = new List<SignalPoint>();
-
-		for (int i = 0; i < points.Count; i++){
+		List<SignalSegment> segments = new();
+		List<Vector2> currentSegmentPoints = new();
+		for (int i = 0; i < points.Count-1; i++){
 			SignalPoint point = points[i];
-			if (i == 0){
-				if(point.drawn){
-					currentSegment.Add(point);
-				}
-				continue;
-			}
-			SignalPoint prevPoint = points[i - 1];
-			if (prevPoint.drawn){
-				AddToCurrentSegment(point);
-			}
-			else{
-				FinishCurrentSegment();
-				AddToCurrentSegment(point);
+			AddToCurrentSegment(point);
+			if(!point.drawn && points[i+1].drawn){
+				AddSegment(currentSegmentPoints.ToArray(), i - 1);//Todo check if end index is correct
+				currentSegmentPoints.Clear();
 			}
 		}
-		FinishCurrentSegment();
+		
+		AddToCurrentSegment(points[points.Count-1]);
+		AddSegment(currentSegmentPoints.ToArray(), points.Count - 1);
+		if (segments.Count > 0){
+			Debug.Log($"Segment length: {segments[0].points.Length} Segment end: {segments[0].endIndex}");
+		}
 		return segments.ToArray();
 
 		void AddToCurrentSegment(SignalPoint point)
@@ -179,16 +246,15 @@ public class Signal
 			if (!point.drawn){
 				return;
 			}
-			currentSegment.Add(point);
+			currentSegmentPoints.Add(point.position);
 		}
 
-		void FinishCurrentSegment()
+		void AddSegment(Vector2[] signalPoints, int end)
 		{
-			if (currentSegment.Count <= 0){
+			if (signalPoints.Length <= 0){
 				return;
 			}
-			segments.Add(currentSegment.ToArray());
-			currentSegment.Clear();
+			segments.Add(new SignalSegment(signalPoints, end));
 		}
 	}
 }

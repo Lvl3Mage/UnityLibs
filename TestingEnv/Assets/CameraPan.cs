@@ -34,19 +34,24 @@ public class CameraPan : CameraController
 	// Update is called once per frame
 	protected override void CameraUpdate()
 	{
-		
-		targetSize -= Input.mouseScrollDelta.y*scrollSpeed*targetSize;
+		if (respondToInput){
+			targetSize -= Input.mouseScrollDelta.y * scrollSpeed * targetSize;
+		}
 		targetSize = Mathf.Clamp(targetSize,sizeClamp.x,sizeClamp.y);
 		camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, targetSize, scrollLerpSpeed*Time.deltaTime);
 		Vector2 cursorPosition = camera.ScreenToWorldPoint(Input.mousePosition);
 		if(Input.GetMouseButtonDown(1)){
-			lastCursorPosition = cursorPosition;
+			if (respondToInput){
+				lastCursorPosition = cursorPosition;
+			}
 		}
 		else if(Input.GetMouseButton(1)){
-			Vector2 cursorDelta = cursorPosition - lastCursorPosition;
-			targetPosition -= new Vector3(cursorDelta.x, cursorDelta.y, 0)*panSpeed;
-			targetPosition.x = Mathf.Clamp(targetPosition.x, HorizontalClamp.x, HorizontalClamp.y);
-			targetPosition.y = Mathf.Clamp(targetPosition.y, VerticalClamp.x, VerticalClamp.y);
+			if (respondToInput){
+				Vector2 cursorDelta = cursorPosition - lastCursorPosition;
+				targetPosition -= new Vector3(cursorDelta.x, cursorDelta.y, 0)*panSpeed;
+				targetPosition.x = Mathf.Clamp(targetPosition.x, HorizontalClamp.x, HorizontalClamp.y);
+				targetPosition.y = Mathf.Clamp(targetPosition.y, VerticalClamp.x, VerticalClamp.y);
+			}
 			lastCursorPosition = cursorPosition;
 		}
 		targetPosition.z = transform.localPosition.z;
