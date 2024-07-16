@@ -2750,9 +2750,11 @@ GameObject:
   - component: {fileID: 869561763}
   - component: {fileID: 869561767}
   - component: {fileID: 869561766}
-  - component: {fileID: 869561768}
-  - component: {fileID: 869561770}
   - component: {fileID: 869561769}
+  - component: {fileID: 869561772}
+  - component: {fileID: 869561770}
+  - component: {fileID: 869561771}
+  - component: {fileID: 869561768}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2838,6 +2840,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7dd155120b3f684fbaca6cddb61169d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startActive: 1
+  attachedBehaviours: []
 --- !u!114 &869561767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2883,15 +2887,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439b4e47f20d3e64ab559b6462389523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
-  controlledExternally: 1
-  scrollSpeed: 0.5
-  scrollLerpSpeed: 5
+  active: 0
   sizeClamp: {x: 0.05, y: 10}
-  panLerpSpeed: 10
-  panSpeed: 1.5
-  HorizontalClamp: {x: -10, y: 10}
-  VerticalClamp: {x: -10, y: 10}
+  zoomFactor: 0.5
+  panFactor: 1.5
+  clampX: {x: -10, y: 10}
+  clampY: {x: -10, y: 10}
+  useLocalPosition: 0
 --- !u!114 &869561769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2904,9 +2906,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ee5a4e28b49634db75d90e11a37e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  active: 1
   cameraControllers:
-  - {fileID: 869561768}
-  - {fileID: 869561770}
+  - {fileID: 869561771}
+  - {fileID: 869561772}
 --- !u!114 &869561770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2919,12 +2922,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023e6c432c9321448b1b9dfef2de467c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
-  controlledExternally: 1
+  active: 0
   scrollSpeed: 0.5
-  scrollLerpSpeed: 5
   sizeClamp: {x: 0.001, y: 10}
   dftVisualizer: {fileID: 1100620104}
+--- !u!114 &869561771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869561762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d4c541652f404d843a2c9b2d19077c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  interpolatePosition: 1
+  panSpeed: 15
+  interpolateZoom: 1
+  zoomSpeed: 10
+  interpolateRotation: 0
+  rotationSpeed: 20
+  targetController: {fileID: 869561768}
+--- !u!114 &869561772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869561762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d4c541652f404d843a2c9b2d19077c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  interpolatePosition: 0
+  panSpeed: 20
+  interpolateZoom: 1
+  zoomSpeed: 10
+  interpolateRotation: 0
+  rotationSpeed: 20
+  targetController: {fileID: 869561770}
 --- !u!1001 &883696744
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3508,7 +3549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -388.51086}
+  m_AnchoredPosition: {x: 0, y: -483.50998}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1008692652

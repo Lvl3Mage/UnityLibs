@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CameraManagement;
+using CameraManagement2D;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,12 +27,12 @@ namespace Fourier
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
-			cameraManager.SetRespondToInput(false);
+			cameraManager.UseUserInput(false);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
 		{
-			cameraManager.SetRespondToInput(true);
+			cameraManager.UseUserInput(true);
 		}
 
 		void Update()

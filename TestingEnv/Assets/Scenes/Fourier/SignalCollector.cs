@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using CameraManagement2D;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -64,7 +65,7 @@ public class SignalCollector : MonoBehaviour, IPointerMoveHandler, IPointerDownH
 			return;
 		}
 		Debug.Log("Pointer move");
-		Vector2 mousePos = WorldCamera.GetWorldMousePos();
+		Vector2 mousePos = SceneCamera.GetWorldMousePos();
 		mousePosBuffer[mousePosBufferIndex] = mousePos;
 		mousePosBufferIndex++;
 		mousePosBufferIndex %= mousePosBuffer.Length;
@@ -86,7 +87,7 @@ public class SignalCollector : MonoBehaviour, IPointerMoveHandler, IPointerDownH
 	{
 		mousePosBufferIndex = 0;
 		mousePosBuffer = new Vector2[smoothingSteps];
-		Array.Fill<Vector2>(mousePosBuffer, WorldCamera.GetWorldMousePos());
+		Array.Fill<Vector2>(mousePosBuffer, SceneCamera.GetWorldMousePos());
 	}
 	public void StartCollection()
 	{

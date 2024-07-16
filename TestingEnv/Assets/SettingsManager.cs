@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CameraManagement;
+using CameraManagement2D;
 using UnityEngine;
 
 namespace Fourier
@@ -39,7 +39,7 @@ public class SettingsManager : MonoBehaviour
 			{"hideFirst", new Setting<bool>((value) => dftVisualizer.SetVisualizeFirst(!value), true)},
 			{"followDFT", new Setting<bool>((value) => {
 				if (sceneManager.IsVisualizing()){
-					cameraManager.SetActive(value ? 1 : 0);
+					cameraManager.SwitchToController(value ? 1 : 0);
 				}
 			}, false)},
 			{"showPreview", new Setting<bool>((value) => {

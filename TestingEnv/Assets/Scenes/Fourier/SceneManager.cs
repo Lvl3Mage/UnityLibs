@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CameraManagement;
+using CameraManagement2D;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -41,7 +41,7 @@ public class SceneManager : MonoBehaviour
 					signalCollector.StartCollection();
 				},
 				() => {
-					cameraManager.SetActive(0);
+					cameraManager.SwitchToController(0);
 					TryAdvanceStep();
 				},
 				signalCollector.outputValid
